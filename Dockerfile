@@ -29,7 +29,7 @@
     
     # Sao chép file JAR đã build từ stage 1
     # Giả sử file .jar tên là demo-1.0.jar
-    COPY --from=build /app/target/demo-1.0.jar app.jar
+    COPY --from=build /app/target/testing.jar app.jar
     
     # Khởi chạy ứng dụng
     ENTRYPOINT ["java", "-jar", "app.jar"]
