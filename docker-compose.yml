@@ -5,7 +5,8 @@ services:
     build: .
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-26154030-caoky-de8f.g.aivencloud.com:22423/defaultdb"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-26154030-caoky-de8f.g.aivencloud.com:22423/defaultdb?useSSL=true&requireSSL=true&verifyServerCertificate=false"
+
       SPRING_DATASOURCE_USERNAME: "avnadmin"
       SPRING_DATASOURCE_PASSWORD: "AVNS_rK2vnAik3WpBICGT3ZS"
       
