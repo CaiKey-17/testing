@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/giuaki
-    username: root
-    password: ''
+
+    url: jdbc:mysql://mysql-26154030-caoky-de8f.g.aivencloud.com:22423/defaultdb
+    username: avnadmin
+    password: 'AVNS_rK2vnAik3WpBICGT3ZS'
   jpa:
     hibernate:
       ddl-auto: update
