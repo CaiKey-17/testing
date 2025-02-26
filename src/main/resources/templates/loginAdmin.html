@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>NCK Admin</title>
+  <link th:href="@{/css/admin.css}" rel="stylesheet">
+
+  <script th:src="@{/js/login.js}"></script>
+</head>
+<body>
+<section class="container">
+  <div class="login-container">
+    <div class="circle circle-one"></div>
+    <div class="form-container">
+      <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+      <h1 class="opacity">LOGIN</h1>
+
+      <form method="POST" th:action="@{/login}">
+        <input type="text" name="username" placeholder="USERNAME" />
+        <input type="password" name="password" placeholder="PASSWORD"  />
+        <button type="submit">SUBMIT</button>
+      </form>
+      <div th:if="${param.error}" class="error-message" style="color: red;">
+        <p>Tên đăng nhập hoặc mật khẩu không đúng!</p>
+      </div>
+
+      <div class="register-forget opacity">
+        <a href="/forgot">FORGOT PASSWORD</a>
+      </div>
+
+    </div>
+    <div class="circle circle-two"></div>
+  </div>
+  <div class="theme-btn-container"></div>
+</section>
+</body>
+</html>

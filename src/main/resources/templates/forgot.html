@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>NCK Admin</title>
+    <link th:href="@{/css/admin.css}" rel="stylesheet">
+
+    <script th:src="@{/js/login.js}"></script>
+</head>
+<body>
+<section class="container">
+    <div class="login-container">
+        <div class="form-container">
+            <h1>RESET PASSWORD</h1>
+            <form method="POST" th:action="@{/forgot}" id="forgot-form" onsubmit="console.log('Form submitted!')">
+                <input id="email" type="email" name="email" placeholder="Enter your email" required />
+                <button type="submit">Reset Password</button>
+            </form>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    // Hàm kiểm tra trước khi gửi
+    document.getElementById("forgot-form").addEventListener("submit", function(event) {
+        console.log("Helô");
+        // Thực hiện các kiểm tra cần thiết ở đây nếu muốn
+    });
+</script>
+</body>
+
+
+</html>

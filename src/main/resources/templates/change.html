@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Đổi Mật Khẩu</title>
+  <link th:href="@{/css/admin.css}" rel="stylesheet">
+</head>
+<body>
+<section class="container">
+  <div class="change-password-container">
+    <h1>Đổi Mật Khẩu</h1>
+    <form action="/change" method="post" th:action="@{/change}">
+      <input type="password" name="oldPassword" placeholder="Mật khẩu cũ" required />
+      <input type="password" name="newPassword" placeholder="Mật khẩu mới" required />
+      <button type="submit">Đổi mật khẩu</button>
+    </form>
+
+
+  </div>
+</section>
+</body>
+</html>

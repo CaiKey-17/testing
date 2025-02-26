@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nck shops</title>
+    <link rel="shortcut icon" type="image/png" href="https://cdn3.iconfinder.com/data/icons/alchemy-2/500/yul517_20_mystery_alchemy_pyramid_tattoo_logo_fashion_retro-64.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+    <link rel="preload"
+          href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&amp;display=swap&amp;subset=vietnamese">
+    <link rel="stylesheet" th:href="@{/css/style1.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
+    <link th:href="@{/css/style2.css}" rel="stylesheet">
+    <link th:href="@{/css/style3.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+    <link th:href="@{/css/cart.css}" rel="stylesheet">
+    <link th:href="@{/css/item.css}" rel="stylesheet">
+    <link th:href="@{/css/run.css}" rel="stylesheet">
+    <!-- Import Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>.owl-theme .owl-dots, .owl-theme .owl-nav {
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+    display: none;
+}</style>
+
+</head>
+<body>
+<div class="main-body">
+    <div class="scroller" style="background-color: #fff;">
+        <div class="scroller-inner">
+            <div th:insert="fragments/header :: header"></div>
+            <div th:insert="fragments/main :: main"></div>
+
+            <div th:insert="fragments/mainbody :: main"></div>
+            <div th:insert="fragments/chaychu2"></div>
+
+            <div th:insert="fragments/footer :: footer"></div>
+        </div>
+    </div>
+    <div th:insert="fragments/cart"></div>
+</div>
+<div th:insert="fragments/run"></div>
+
+</body>
+
+<script type="text/javascript" th:src="@{/js/chay.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script type="text/javascript" th:src="@{/js/cart.js}"></script>
+
+</html>
+
+
+
+

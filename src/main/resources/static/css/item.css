@@ -1,0 +1,54 @@
+/* Tạo khoảng cách giữa mũi tên và chữ */
+.inline-select {
+    display: inline-block;
+    margin-right: 15px; /* Tạo không gian giữa các phần tử */
+}
+
+/* Đặt kích thước của phần select để phù hợp với mũi tên */
+.inline-select label {
+    margin-right: 10px; /* Khoảng cách giữa nhãn và select */
+    font-size: 14px;    /* Kích thước chữ */
+    font-weight: bold;  /* Đậm chữ */
+}
+
+.inline-select select {
+    padding-right: 30px; /* Tạo không gian cho mũi tên bên phải */
+    padding-left: 10px;  /* Khoảng cách giữa chữ và lề trái */
+    font-size: 16px;     /* Kích thước chữ */
+    width: 155px;        /* Chiều rộng đồng nhất cho tất cả các select */
+    height: 40px;       /* Chiều cao đồng nhất cho tất cả các select */
+    line-height: 40px;  /* Căn giữa chữ trong select */
+    border: 1px solid #ccc; /* Đường viền cho select */
+    border-radius: 4px; /* Bo tròn góc cho select */
+    background-color: #fff; /* Màu nền */
+}
+
+/* Khi select được chọn */
+.inline-select select:focus {
+    outline: none; /* Không hiển thị viền mặc định */
+    border-color: #007bff; /* Đổi màu viền khi focus */
+}
+
+/* Phần tìm kiếm sản phẩm */
+.collection-search {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.collection-search input {
+    padding: 5px;
+    font-size: 14px;
+    width: 200px; /* Chiều rộng của input tìm kiếm */
+}
+
+.collection-search button {
+    padding: 5px 10px;
+    background-color: #000; /* Màu nền của nút */
+    color: #fff; /* Màu chữ */
+    border: none; /* Không có đường viền */
+    cursor: pointer; /* Con trỏ khi hover */
+}
+
+.collection-search button:hover {
+    background-color: #333; /* Màu nền khi hover */
+}

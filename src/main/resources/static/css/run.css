@@ -1,0 +1,65 @@
+.swiper-container-noti {
+  width: 100%;
+  position: fixed;
+  bottom: 0; /* Đặt ở góc dưới */
+  height:50px;
+  left: 0; /* Đặt sát lề trái */
+  z-index: 9999; /* Đảm bảo nó luôn nằm trên các thành phần khác */
+  background-color: #000; /* Màu nền đen */
+  overflow: hidden; /* Ẩn các phần tử vượt quá chiều rộng */
+}
+
+/* Wrapper cho các slide */
+.swiper-wrapper {
+  display: flex;
+  transition-timing-function: linear; /* Đảm bảo chuyển động tuyến tính và mượt mà */
+}
+
+/* Mỗi slide */
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  background-color: #000; /* Màu nền đen */
+  color: #fff; /* Màu chữ trắng */
+}
+
+
+/* Phong cách cho văn bản trong slide */
+.message-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung trong phần tử message-text */
+  align-items: center;
+  padding: 20px;
+  height: 100%;
+}
+
+.message-text-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff; /* Chữ trắng */
+}
+
+.message-text-sub {
+  font-size: 16px;
+  color: #ddd; /* Chữ xám nhạt cho phần phụ */
+  margin-top: 5px;
+}
+
+/* Điều chỉnh cho phiên bản mobile */
+@media (max-width: 768px) {
+  .swiper-slide {
+    min-height: 100px;
+  }
+
+  .message-text-title {
+    font-size: 16px;
+  }
+
+  .message-text-sub {
+    font-size: 14px;
+  }
+}
