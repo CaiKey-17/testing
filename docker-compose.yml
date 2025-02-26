@@ -5,10 +5,9 @@ services:
     build: .
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://sql210.infinityfree.com:3306/if0_37268581_food"
-      SPRING_DATASOURCE_USERNAME: "if0_37268581
-"
-      SPRING_DATASOURCE_PASSWORD: "9gU4skCTpuSvy8"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-26154030-caoky-de8f.g.aivencloud.com:22423/defaultdb"
+      SPRING_DATASOURCE_USERNAME: "avnadmin"
+      SPRING_DATASOURCE_PASSWORD: "a"
       
       # Nếu muốn Hibernate tự tạo/ cập nhật bảng:
       SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
