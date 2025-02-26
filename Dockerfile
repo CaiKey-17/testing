@@ -1,26 +1,32 @@
-# --------------------------------------------------------
-# STAGE 1: BUILD
-# --------------------------------------------------------
-FROM maven:3.8.6-openjdk-17 AS build
+# -------------------------------------------------------
+# 1) Build stage
+# -------------------------------------------------------
+FROM maven:3.8.5-openjdk-17-slim AS build
 
+# Create and switch to /app as the working directory
 WORKDIR /app
 
-# Sao chép toàn bộ project vào container
-COPY . .
+# Copy the 'discoveryserver' folder into /app/discoveryserver
+COPY . ./SpringCommerce
+WORKDIR /app/SpringCommerce
 
-# Build ứng dụng (tạo file .jar trong thư mục target/)
+# Build the Spring Boot jar, skipping tests for speed (remove -DskipTests if desired)
 RUN mvn clean package -DskipTests
 
-# --------------------------------------------------------
-# STAGE 2: RUN
-# --------------------------------------------------------
+
+# -------------------------------------------------------
+# 2) Runtime stage
+# -------------------------------------------------------
 FROM openjdk:17-jdk-slim
 
+# Switch to /app in the runtime image
 WORKDIR /app
 
-EXPOSE 8080
+# Copy the built jar from the first stage
+COPY --from=build /app/SpringCommerce/target/*.jar SpringCommerce.jar
 
-# Dùng wildcard để copy file JAR, đổi tên thành app.jar
-COPY --from=build /app/target/*.jar app.jar
+# Expose the Eureka port (default 8761)
+EXPOSE 8761
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the jar
+ENTRYPOINT ["java", "-jar", "SpringCommerce.jar"]
