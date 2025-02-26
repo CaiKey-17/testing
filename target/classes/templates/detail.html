@@ -1,0 +1,321 @@
+<!-- templates/contact.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nck shops</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+    <link rel="preload"
+          href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&amp;display=swap&amp;subset=vietnamese">
+    <link rel="stylesheet" th:href="@{/css/style1.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
+    <link th:href="@{/css/style2.css}" rel="stylesheet">
+    <link th:href="@{/css/style3.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+
+    <link th:href="@{/css/detailstyle.css}" rel="stylesheet">
+
+    <link th:href="@{/css/cart.css}" rel="stylesheet">
+
+    <style>
+.collection-sorter .collection-sort {
+        float: left;
+    font-weight: 900;
+    font-size: 20px;
+}
+    </style>
+    <style>
+        .nck-color-selection span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.nck-color-selection span.selected {
+    border: 2px solid #000; /* Viền để hiển thị màu đã chọn */
+}
+
+    </style>
+
+
+
+</head>
+<body>
+<div class="main-body">
+    <div class="scroller" style="background-color: #fff;">
+        <div class="scroller-inner">
+
+            <div th:insert="fragments/header :: header"></div>
+
+            <div th:insert="fragments/detailbody :: main"></div>
+
+            <div th:insert="fragments/chaychu"></div>
+
+            <div th:insert="fragments/footer :: footer"></div>
+
+
+        </div>
+    </div>
+    <div th:insert="fragments/cart"></div>
+
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var cart = []; // Khởi tạo mảng giỏ hàng rỗng
+
+    // Tải giỏ hàng từ Local Storage
+    function loadCartFromLocalStorage() {
+        const cartData = localStorage.getItem('cart');
+        if (cartData) {
+            cart = JSON.parse(cartData);
+            updateCartView();
+        }
+    }
+
+    // Lưu giỏ hàng vào Local Storage
+    function saveCartToLocalStorage() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
+ // Thêm sản phẩm vào giỏ hàng
+function addToCart() {
+    var productId = "HADES-STRIPED-SHIRT"; // ID sản phẩm tùy chỉnh
+
+    var productBlock = document.querySelector('.nck-right-column'); // Lấy phần tử chứa thông tin sản phẩm
+    var productName = productBlock.querySelector('h1').innerText; // Tên sản phẩm
+    var productPrice = productBlock.querySelector('.nck-price').innerText; // Giá sản phẩm
+    var productImg = document.querySelector('#main-image').src; // Hình ảnh sản phẩm chính
+
+    // Lấy màu sắc đã chọn
+    var selectedColorElement = document.querySelector('.nck-color-selection .selected');
+    var productColor = selectedColorElement ? selectedColorElement.getAttribute('data-color') : "Màu sắc không xác định";
+
+    // Lấy kích thước đã chọn
+    var selectedSizeElement = document.querySelector('.size-option.selected');
+    var productSize = selectedSizeElement ? selectedSizeElement.innerText : "Kích thước không xác định";
+
+    // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng với cùng màu sắc và kích thước
+    var existingProduct = cart.find(product =>
+        product.id === productId &&
+        product.variant.color === productColor &&
+        product.variant.size === productSize
+    );
+
+    if (existingProduct) {
+        // Nếu đã tồn tại, tăng số lượng sản phẩm
+        existingProduct.quantity += 1;
+    } else {
+        // Nếu chưa, tạo sản phẩm mới và thêm vào giỏ hàng
+        var product = {
+            id: productId,
+            name: productName,
+            price: productPrice,
+            img: productImg,
+            quantity: 1,
+            variant: {
+                color: productColor,
+                size: productSize
+            }
+        };
+        cart.push(product);
+    }
+
+    updateCartView(); // Cập nhật giao diện giỏ hàng
+    saveCartToLocalStorage(); // Lưu giỏ hàng vào Local Storage
+}
+
+ // Hàm để chọn màu sắc
+ function selectColor(element, colorName) {
+     // Bỏ chọn tất cả các màu sắc
+     var colors = document.querySelectorAll('.nck-color-selection span');
+     colors.forEach(function(color) {
+         color.classList.remove('selected'); // Xóa class 'selected' khỏi tất cả màu sắc
+     });
+
+     // Chọn màu sắc hiện tại
+     element.classList.add('selected');
+     element.setAttribute('data-color', colorName); // Lưu tên màu sắc
+ }
+
+ // Hàm để chọn kích thước
+ function selectSize(element, sizeName) {
+     // Bỏ chọn tất cả các kích thước
+     var sizes = document.querySelectorAll('.nck-size-options .size-option');
+     sizes.forEach(function(size) {
+         size.classList.remove('selected'); // Xóa class 'selected' khỏi tất cả kích thước
+     });
+
+     // Chọn kích thước hiện tại
+     element.classList.add('selected');
+ }
+
+
+
+    // Cập nhật giao diện giỏ hàng
+    // Cập nhật giao diện giỏ hàng
+    // Cập nhật giao diện giỏ hàng
+    // Cập nhật giao diện giỏ hàng
+function updateCartView() {
+    var cartTable = document.querySelector("#cart-view tbody");
+    cartTable.innerHTML = ""; // Xóa nội dung bảng giỏ hàng hiện tại
+
+    var total = 0;
+    var totalQuantity = 0; // Tổng số lượng sản phẩm
+
+    // Duyệt qua từng sản phẩm trong giỏ hàng
+    cart.forEach(function(product) {
+        // Cộng dồn số lượng sản phẩm
+        totalQuantity += product.quantity;
+
+        // Tạo dòng mới trong bảng giỏ hàng
+        var newRow = document.createElement("tr");
+        newRow.classList.add("item_" + product.id);
+
+        // Kiểm tra và lấy thông tin variant
+        var color = product.variant && product.variant.color ? product.variant.color : "Màu sắc không xác định";
+        var size = product.variant && product.variant.size ? product.variant.size : "Kích thước không xác định";
+
+        newRow.innerHTML = `
+            <td class="img">
+                <a href="/products/${product.id}" title="${product.name}">
+                    <img src="${product.img}" alt="${product.name}">
+                </a>
+            </td>
+            <td>
+                <a class="pro-title-view" href="/products/${product.id}" title="${product.name}">${product.name}</a>
+                <span class="variant">${color} / ${size}</span>
+                <span class="pro-quantity-view">Số lượng: ${product.quantity}</span>
+                <span class="pro-price-view">${product.price}</span>
+                <span class="remove_link remove-cart">
+                    <a href="javascript:void(0);" onclick="deleteCart('${product.id}', '${color}', '${size}')"><i class="fa fa-times"></i></a>
+                </span>
+            </td>
+        `;
+
+        cartTable.appendChild(newRow);
+
+        // Cộng dồn giá trị sản phẩm (giá * số lượng)
+        total += parseInt(product.price.replace(/[₫,]/g, '')) * product.quantity;
+    });
+
+    // Cập nhật tổng số lượng sản phẩm trong giỏ
+    document.querySelector('.count').innerText = `(${totalQuantity})`;
+
+    // Hiển thị tổng giá trị giỏ hàng
+    document.getElementById("total-view-cart").innerText = total.toLocaleString('vi-VN') + '₫';
+}
+
+
+// Xóa sản phẩm khỏi giỏ hàng
+function deleteCart(productId, color, size) {
+    // Loại bỏ sản phẩm dựa trên ID, màu sắc và kích thước
+    cart = cart.filter(item => !(item.id === productId && item.variant.color === color && item.variant.size === size));
+    updateCartView(); // Cập nhật giao diện giỏ hàng
+    saveCartToLocalStorage(); // Lưu giỏ hàng vào Local Storage
+}
+
+
+    // Khởi chạy khi DOM đã tải xong
+    document.addEventListener("DOMContentLoaded", function() {
+        loadCartFromLocalStorage(); // Tải giỏ hàng từ Local Storage khi trang được mở
+    });
+
+</script>
+
+<script >
+    // Hàm để thay đổi hình ảnh chính khi nhấp vào thumbnail
+function changeImage(thumbnail) {
+    // Lấy đường dẫn hình ảnh từ thumbnail đã nhấp
+    var newImageSrc = thumbnail.src;
+
+    // Cập nhật hình ảnh chính
+    document.getElementById('main-image').src = newImageSrc;
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+
+<script>
+
+    var cart = []; // Khởi tạo mảng giỏ hàng rỗng
+
+// Tải giỏ hàng từ Local Storage
+function loadCartFromLocalStorage() {
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+        cart = JSON.parse(cartData);
+        updateCartView();
+    }
+}
+
+// Lưu giỏ hàng vào Local Storage
+function saveCartToLocalStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Thêm sản phẩm vào giỏ hàng
+function addToCartT(button) {
+    var productId = button.getAttribute("data-variantid");
+    console.log("Product ID:", productId);
+    var productBlock = button.closest('.product-block');
+    var productName = productBlock.querySelector('.pro-name a').innerText;
+    var productPrice = productBlock.querySelector('.pro-price').innerText;
+    var productImg = productBlock.querySelector('img.img-loop').src;
+
+    // Lấy tất cả màu sắc
+    var productColors = productBlock.querySelectorAll('.product-loop-variant-span-ck');
+
+    // Lấy màu sắc đầu tiên (nếu có)
+    var productColor = productColors.length > 0 ? productColors[0].classList[1] : "Màu sắc không xác định"; // Lấy class thứ hai để xác định màu
+
+    var size = 'S'; // Kích thước mặc định là S
+
+    // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng hay chưa
+    var existingProduct = cart.find(product => product.id === productId);
+
+    if (existingProduct) {
+        // Nếu đã tồn tại, tăng số lượng sản phẩm
+        existingProduct.quantity += 1;
+    } else {
+        // Nếu chưa, tạo sản phẩm mới và thêm vào giỏ hàng
+        var product = {
+            id: productId,
+            name: productName,
+            price: productPrice,
+            img: productImg,
+            quantity: 1,
+            variant: {
+                color: productColor, // Sử dụng màu sắc đầu tiên
+                size: size           // Đảm bảo kích thước đã được khởi tạo
+            }
+        };
+        cart.push(product);
+    }
+
+    updateCartView(); // Cập nhật giao diện giỏ hàng
+    saveCartToLocalStorage(); // Lưu giỏ hàng vào Local Storage
+}
+
+
+
+
+</script>
+
+
+
+
+</html>
+
+
+

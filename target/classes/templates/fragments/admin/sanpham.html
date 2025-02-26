@@ -1,0 +1,166 @@
+<style>
+    #clothesForm {
+    margin-bottom: 20px; /* Khoảng cách giữa form và bảng */
+}
+
+/* Định dạng cho các label */
+#clothesForm label {
+    display: block; /* Hiển thị mỗi label trên một dòng riêng */
+    margin-bottom: 5px; /* Khoảng cách giữa label và input */
+    font-weight: bold; /* Làm cho chữ in đậm */
+}
+
+/* Định dạng cho các input và textarea */
+#clothesForm input[type="text"],
+#clothesForm input[type="number"],
+#clothesForm textarea,
+#clothesForm input[type="file"] {
+    width: 100%; /* Chiều rộng 100% cho các input */
+    padding: 10px; /* Khoảng cách bên trong */
+    margin-bottom: 15px; /* Khoảng cách giữa các input */
+    border: 1px solid #ccc; /* Viền xám nhạt */
+    border-radius: 4px; /* Bo góc */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng tổng thể */
+}
+
+/* Định dạng cho nút submit */
+#clothesForm button[type="submit"] {
+    background-color: #28a745; /* Màu nền xanh lá cây */
+    color: white; /* Chữ trắng */
+    border: none; /* Không có viền */
+    padding: 10px 15px; /* Khoảng cách bên trong */
+    border-radius: 4px; /* Bo góc */
+    cursor: pointer; /* Con trỏ khi hover */
+    font-size: 16px; /* Kích thước chữ */
+}
+
+/* Hiệu ứng hover cho nút submit */
+#clothesForm button[type="submit"]:hover {
+    background-color: #218838; /* Màu nền khi hover */
+}
+</style>
+
+<div class="row" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Danh mục sản phẩm</h4>
+                <form id="clothesForm" action="clothes" method="POST" enctype="multipart/form-data">
+                    <label for="clothesName">Tên Quần áo:</label>
+                    <input type="text" id="clothesName" name="name" required>
+
+                    <label for="material">Chất liệu:</label>
+                    <input type="text" id="material" name="material" required>
+
+                    <label for="content">Nội dung:</label>
+                    <textarea id="content" name="content" required></textarea>
+
+                    <label for="detail">Chi tiết:</label>
+                    <textarea id="detail" name="detail" required></textarea>
+
+                    <label for="price">Giá:</label>
+                    <input type="number" id="price" name="price" required step="0.01">
+
+                    <label for="quantity">Số lượng:</label>
+                    <input type="number" id="quantity" name="quantity" required>
+
+                    <label for="image">Ảnh:</label>
+                    <input type="file" id="image" name="image" required>
+
+                    <label for="imagehover">Ảnh hover:</label>
+                    <input type="file" id="imagehover" name="imagehover" required>
+
+                    <label for="brand">Thương hiệu ID:</label>
+                    <input type="number" id="brand" name="brandId" required>
+
+                    <button type="submit">Thêm Quần áo</button>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                Tên
+                            </th>
+                            <th>
+                                Giá
+                            </th>
+                            <th>
+                                Số lượng
+                            </th>
+                            <th>
+                                Mô tả
+                            </th>
+                            <th>
+                                Nội dung
+                            </th>
+                            <th>
+                                Ảnh
+                            </th>
+                            <th>
+                                Ảnh hover
+                            </th>
+                            <th>
+                                Tuỳ chọn
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="clothe : ${list_clothes}">
+
+                            <td th:text="${clothe.name}">
+                            </td>
+                            <td th:text="${clothe.price}">
+                            </td>
+                            <td th:text="${clothe.quantity}">
+                            </td>
+                            <td th:text="${clothe.detail}">
+                            </td>
+                            <td th:text="${clothe.content}">
+                            </td>
+                            <td class="py-1">
+                                <img  alt="HADES LODESTAR BLUR TEE" th:src="@{/images/{image}(image=${clothe.image})}" />
+                            </td>
+                            <td class="py-1">
+                                <img  alt="HADES LODESTAR BLUR TEE" th:src="@{/images/{image}(image=${clothe.imagehover})}" />
+                            </td>
+                            <td>
+                                <a th:href="@{sua/{id}(id=${clothe.id})}" class="btn btn-warning">Sửa</a>
+                                <button type="button" class="btn btn-danger"
+                                        th:onclick="'deleteSize(' + ${clothe.id} + ')'">Xoá</button>
+                            </td>
+
+
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function deleteSize(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+            fetch('/xoa_clothes/' + id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload(); // Tải lại trang sau khi xóa
+                } else {
+                    alert('Có lỗi xảy ra khi xóa kích thước.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa đơn</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e9ecef;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .customer-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-container">
+    <h1>Hóa đơn</h1>
+
+    <div class="form-container">
+        <h2>Thông tin cá nhân</h2>
+        <form id="customer-form" action="/invoice" method="POST">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> <!-- Token CSRF -->
+            <label for="name">Tên:</label>
+            <input type="text" id="name" name="name" placeholder="Nhập tên của bạn" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email của bạn" required>
+
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" required>
+
+            <label for="address">Địa chỉ cụ thể:</label>
+            <input type="text" id="address" name="address" placeholder="Nhập địa chỉ (số nhà, tên đường...)" required>
+
+            <div>
+                <label for="city">Chọn tỉnh/thành phố:</label>
+                <select class="form-select form-select-sm mb-3" id="city" aria-label=".form-select-sm">
+                    <option value="" selected>Chọn tỉnh thành</option>
+                </select>
+
+                <label for="district">Chọn quận/huyện:</label>
+                <select class="form-select form-select-sm mb-3" id="district" aria-label=".form-select-sm">
+                    <option value="" selected>Chọn quận huyện</option>
+                </select>
+
+                <label for="ward">Chọn xã/phường:</label>
+                <select class="form-select form-select-sm" id="ward" aria-label=".form-select-sm">
+                    <option value="" selected>Chọn phường xã</option>
+                </select>
+            </div>
+
+            <button type="submit">Xác nhận</button>
+        </form>
+    </div>
+
+    <div class="customer-info" id="customer-info"></div>
+
+    <table id="invoice-table">
+        <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Màu sắc / Kích thước</th>
+            <th>Thành tiền</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="total">
+        Tổng tiền: <span id="total-amount">0₫</span>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            citis.options[citis.options.length] = new Option(x.Name, x.Id);
+        }
+
+        citis.onchange = function () {
+            districts.length = 1; // Reset danh sách quận/huyện
+            wards.length = 1; // Reset danh sách phường/xã
+            if (this.value !== "") {
+                const result = data.filter(n => n.Id === this.value);
+                for (const k of result[0].Districts) {
+                    districts.options[districts.options.length] = new Option(k.Name, k.Id);
+                }
+            }
+        };
+
+        districts.onchange = function () {
+            wards.length = 1; // Reset danh sách phường/xã
+            const dataCity = data.filter(n => n.Id === citis.value);
+            if (this.value !== "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+                for (const w of dataWards) {
+                    wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                }
+            }
+        };
+    }
+</script>
+
+<script>
+    // Hàm tải giỏ hàng từ localStorage
+    function loadCartFromLocalStorage() {
+        const cartData = localStorage.getItem('cart');
+        return cartData ? JSON.parse(cartData) : [];
+    }
+
+    // Hàm hiển thị hóa đơn
+    function displayInvoice() {
+        const cart = loadCartFromLocalStorage();
+        const invoiceTable = document.querySelector("#invoice-table tbody");
+        let totalAmount = 0;
+
+        cart.forEach(product => {
+            const productTotal = parseInt(product.price.replace(/[₫,]/g, '')) * product.quantity;
+            totalAmount += productTotal;
+
+            const newRow = document.createElement("tr");
+
+            newRow.innerHTML = `
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td>${product.quantity}</td>
+                <td>${product.variant.color} / ${product.variant.size}</td>
+                <td>${productTotal.toLocaleString('vi-VN')}₫</td>
+            `;
+
+            invoiceTable.appendChild(newRow);
+        });
+
+        document.getElementById("total-amount").innerText = totalAmount.toLocaleString('vi-VN') + '₫';
+    }
+
+    document.getElementById('customer-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn form submit lại trang
+        const name = document.getElementById('name').value;
+        const address = document.getElementById('address').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+
+        const city = document.getElementById('city').options[document.getElementById('city').selectedIndex].text;
+        const district = document.getElementById('district').options[document.getElementById('district').selectedIndex].text;
+        const ward = document.getElementById('ward').options[document.getElementById('ward').selectedIndex].text;
+
+        const addressSubmit = `${address}, ${ward}, ${district}, ${city}`;
+        const cart = loadCartFromLocalStorage();
+
+        const invoiceData = {
+            name: name,
+            email: email,
+            phone: phone,
+            address: addressSubmit,
+            total: document.getElementById("total-amount").innerText.replace('₫', '').trim(), // Lấy tổng tiền
+            products: cart.map(product => ({
+                name: product.name,
+                price: product.price,
+                quantity: product.quantity,
+                color: product.variant.color,
+                size: product.variant.size
+            }))
+        };
+
+        console.log('invoiceData:', invoiceData);
+
+        fetch('/invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(invoiceData),
+        })
+        .then(response => {
+            console.log('Status Code:', response.status); // Kiểm tra mã trạng thái
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+
+         fetch('/invoice/order', { // Cập nhật URL
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invoiceData),
+    })
+    .then(response => {
+        console.log('Status Code:', response.status); // Kiểm tra mã trạng thái
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log(data);
+        // Hiển thị thông báo thành công hoặc thực hiện các hành động khác
+        const countdownDiv = document.createElement('div');
+        countdownDiv.innerHTML = '<h2>Còn 10 giây sẽ quay lại trang chủ</h2>';
+        document.body.appendChild(countdownDiv);
+
+        let countdown = 10; // 5 giây
+        const interval = setInterval(() => {
+            countdown--;
+            countdownDiv.innerHTML = `<h2>Còn ${countdown} giây sẽ quay lại trang chủ</h2>`;
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.href = '/'; // Chuyển hướng về trang chủ
+            }
+        }, 1000);
+    })
+    .catch(error => console.error('Error:', error));
+
+
+
+
+        const customerInfoDiv = document.getElementById('customer-info');
+        customerInfoDiv.innerHTML = `
+            <h2>Hoá đơn bạn</h2>
+            <p><strong>Tên:</strong> ${name}</p>
+            <p><strong>Địa chỉ:</strong> ${addressSubmit}</p>
+            <p><strong>Số điện thoại:</strong> ${phone}</p>
+            <p><strong>Email:</strong> ${email}</p>
+        `;
+
+        document.getElementById('customer-form').style.display = 'none';
+    });
+
+    document.addEventListener("DOMContentLoaded", displayInvoice);
+
+
+</script>
+
+</body>
+</html>

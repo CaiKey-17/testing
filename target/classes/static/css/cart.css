@@ -1,0 +1,7 @@
+  #site-nav--mobile {
+        display: none; /* Ẩn giỏ hàng theo mặc định */
+    }
+
+    #site-nav--mobile.active {
+        display: block; /* Hiển thị giỏ hàng khi active */
+    }

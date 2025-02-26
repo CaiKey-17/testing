@@ -1,0 +1,133 @@
+
+<style>
+    body {
+        font-family: Arial, sans-serif; /* Đặt font chữ cho toàn bộ body */
+        background-color: #f8f9fa; /* Màu nền nhẹ cho trang */
+        margin: 0; /* Loại bỏ margin mặc định */
+        padding: 20px; /* Thêm padding cho body */
+    }
+
+    #clothesForm {
+        background-color: #ffffff; /* Màu nền trắng cho form */
+        padding: 20px; /* Padding bên trong form */
+        border-radius: 8px; /* Bo góc cho form */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+        max-width: 600px; /* Đặt chiều rộng tối đa cho form */
+        margin: auto; /* Căn giữa form trong trang */
+    }
+
+    label {
+        display: block; /* Hiển thị label như block */
+        margin-bottom: 5px; /* Khoảng cách dưới label */
+        font-weight: bold; /* In đậm label */
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    textarea {
+        width: 100%; /* Đặt chiều rộng cho các trường nhập */
+        padding: 10px; /* Thêm padding cho trường nhập */
+        margin-bottom: 15px; /* Khoảng cách dưới trường nhập */
+        border: 1px solid #ced4da; /* Viền cho trường nhập */
+        border-radius: 4px; /* Bo góc cho trường nhập */
+        box-sizing: border-box; /* Đảm bảo padding không vượt quá kích thước */
+    }
+
+    textarea {
+        resize: vertical; /* Cho phép kéo dài chiều cao của textarea */
+        min-height: 100px; /* Chiều cao tối thiểu cho textarea */
+    }
+
+    .button-container {
+        display: flex; /* Sử dụng flexbox cho container */
+        justify-content: space-between; /* Căn giữa hai nút */
+        margin-top: 20px; /* Khoảng cách trên các nút */
+    }
+
+    button {
+        background-color: #007bff; /* Màu nền cho nút Thêm */
+        color: white; /* Màu chữ */
+        border: none; /* Không viền */
+        padding: 10px 15px; /* Khoảng cách bên trong */
+        border-radius: 4px; /* Bo góc */
+        cursor: pointer; /* Con trỏ chuột khi hover */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+        font-size: 16px; /* Kích thước chữ */
+        flex: 1; /* Cho phép nút mở rộng để đầy đủ không gian */
+        margin-right: 10px; /* Khoảng cách bên phải cho nút Thêm */
+    }
+
+    button.back-button {
+        background-color: #6c757d; /* Màu nền cho nút Quay về */
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Màu nền khi hover cho nút Thêm */
+    }
+
+    button.back-button:hover {
+        background-color: #5a6268; /* Màu nền khi hover cho nút Quay về */
+    }
+</style>
+<style>
+    /* CSS như bạn đã có */
+</style>
+
+<form id="clothesForm" th:action="@{/clothes/{id}(id=${product.id})}" method="POST" enctype="multipart/form-data" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <input type="hidden" name="id" th:value="${product.id}">
+
+    <label for="clothesName">Tên Quần áo:</label>
+    <input type="text" id="clothesName" name="name" required th:value="${product.name}">
+
+    <label for="material">Chất liệu:</label>
+    <input type="text" id="material" name="material" required th:value="${product.material}">
+
+    <label for="content">Nội dung:</label>
+    <input type="text" id="content" name="content" th:value="${product.content}">
+
+    <label for="detail">Chi tiết:</label>
+    <input type="text" id="detail" name="detail" th:value="${product.detail}">
+
+    <label for="price">Giá:</label>
+    <input type="number" id="price" name="price" required step="0.01" th:value="${product.price}">
+
+    <label for="quantity">Số lượng:</label>
+    <input type="number" id="quantity" name="quantity" required th:value="${product.quantity}">
+
+    <label for="image">Ảnh:</label>
+    <img th:src="@{/images/{image}(image=${product.image})}" alt="Ảnh sản phẩm" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+    <input type="file" id="image" name="image">
+
+    <label for="imagehover">Ảnh hover:</label>
+    <img th:src="@{/images/{image}(image=${product.imagehover})}" alt="Ảnh hover" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+    <input type="file" id="imagehover" name="imagehover">
+
+    <div class="button-container">
+        <button type="submit">Xác nhận</button>
+        <button type="button" class="back-button" onclick="window.history.back();">Quay về</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById('clothesForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn hành động submit mặc định
+
+        // Lấy giá trị từ các trường trong form
+        const formData = new FormData(this); // Lấy dữ liệu từ form
+        const data = {};
+
+        formData.forEach((value, key) => {
+            data[key] = value; // Chuyển đổi FormData thành đối tượng
+        });
+
+        // Log thông tin ra console
+        console.log("Thông tin sản phẩm:", data);
+
+        // Nếu muốn tiếp tục submit form, bạn có thể bỏ comment dòng dưới đây
+        this.submit();
+    });
+</script>
+
+

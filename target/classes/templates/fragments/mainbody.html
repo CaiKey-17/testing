@@ -1,0 +1,168 @@
+<main id="content" xmlns:th="http://www.w3.org/1999/xhtml">
+
+  <section class="section section-collection">
+    <div class="wrapper-collection-1">
+      <div>
+        <div class="wrapper-heading-home wrapper-heading-home-new">
+          <div class="wrapper-animation">
+
+					<span class="text-animation">
+						<h2>
+								<a href="/collections/new-arrivals">
+
+									NEW ARRIVALS
+
+								</a>
+						</h2>
+					</span>
+
+            <span class="text-animation">
+						<h2>
+								<a href="/collections/new-arrivals">
+
+									NEW ARRIVALS
+
+								</a>
+						</h2>
+					</span>
+
+            <span class="text-animation">
+						<h2>
+								<a href="/collections/new-arrivals">
+
+									NEW ARRIVALS
+
+								</a>
+						</h2>
+					</span>
+
+            <span class="text-animation">
+						<h2>
+								<a href="/collections/new-arrivals">
+
+									NEW ARRIVALS
+
+								</a>
+						</h2>
+					</span>
+
+            <span class="text-animation">
+						<h2>
+								<a href="/collections/new-arrivals">
+
+									NEW ARRIVALS
+
+								</a>
+						</h2>
+					</span>
+
+          </div>
+
+        </div>
+
+
+
+
+
+
+      </div>
+    </div>
+  </section>
+  <div id="collection" class="collection-page">
+    <div class="main-content">
+      <div>
+        <div>
+          <div id="collection-body" class="wrap-collection-body clearfix">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+
+
+              <div class="row filter-here">
+                <div class="content-product-list product-list filter clearfix">
+
+
+                  <div class="col-md-3 col-sm-6 col-xs-6 pro-loop col-4" th:each="product : ${aboutInfo}">
+
+
+                    <div class="product-block product-resize fixheight"
+                         data-anmation="38" style="height: 587px;">
+                      <div class="product-img">
+                        <a th:href="'/detail/' + ${product.id}"
+                           title="HADES LODESTAR BLUR TEE" class="image-resize"
+                           style="height: 488px;">
+                          <picture>
+                            <source media="(max-width: 767px)" th:srcset="@{/images/{image}(image=${product.image})}" />
+                            <source media="(min-width: 768px)" th:srcset="@{/images/{image}(image=${product.image})}" />
+                            <img class="img-loop" alt="HADES LODESTAR BLUR TEE" th:src="@{/images/{image}(image=${product.image})}" />
+                          </picture>
+
+                          <picture>
+                            <source media="(max-width: 767px)" th:srcset="@{/images/{image}(image=${product.imagehover})}" />
+                            <source media="(min-width: 768px)" th:srcset="@{/images/{image}(image=${product.imagehover})}" />
+                            <img class="img-loop img-hover" alt="HADES LODESTAR BLUR TEE" th:src="@{/images/{image}(image=${product.imagehover})}" />
+                          </picture>
+
+                        </a>
+                        <div class="button-add" datahand="hares-lodestar-blur-tee">
+                          <button keylanguage="mua_ngay" type="submit"
+                                  title="Mua ngay" class="action lang"
+                                  onclick="buy_now('1115607846')">MUA NGAY
+                          </button>
+                          <button class="action add-to-cart lang"   th:attr="data-variantid=${product.id}"  onclick="addToCart(this)">THÊM VÀO GIỎ</button>
+
+                        </div>
+                      </div>
+
+
+                      <div class="sub-variant-option">
+
+
+                        <div class="product-loop-variant" th:each="color : ${product.colors}">
+                          <div class="product-loop-variant-span" th:classappend="' ' + ${color.name}"></div>
+                          <div class="product-loop-variant-span-ck" th:classappend="' ' + ${color.nameColor}"></div>
+
+                        </div>
+
+
+                      </div>
+
+
+                      <div class="product-detail clearfix">
+                        <div class="box-pro-detail">
+                          <h3 class="pro-name">
+                            <a class="font-oswald"
+                               href="/products/hares-lodestar-blur-tee"
+                               title="HADES LODESTAR BLUR TEE" th:text="${product.name}">
+                            </a>
+                          </h3>
+                          <div class="box-pro-prices">
+                            <p class="pro-price" th:text="${product.price}" >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
+
+                </div>
+
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <input type="text" class="hidden" id="coll-handle" value="(collectionid:product=1001758908)">
+  </div>
+
+
+</main>

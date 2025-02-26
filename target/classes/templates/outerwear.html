@@ -1,0 +1,126 @@
+<!-- templates/contact.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nck shops</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+    <link rel="preload"
+          href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700&amp;display=swap&amp;subset=vietnamese">
+    <link rel="stylesheet" th:href="@{/css/style1.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
+    <link th:href="@{/css/style2.css}" rel="stylesheet">
+    <link th:href="@{/css/style3.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+    <link th:href="@{/css/cart.css}" rel="stylesheet">
+    <link th:href="@{/css/item.css}" rel="stylesheet">
+
+
+
+</head>
+<body>
+<div class="main-body">
+    <div class="scroller" style="background-color: #fff;">
+        <div class="scroller-inner">
+
+            <div th:insert="fragments/header :: header"></div>
+
+            <div th:insert="fragments/outerwearbody :: main"></div>
+
+
+            <div th:insert="fragments/chaychu"></div>
+
+            <div th:insert="fragments/footer :: footer"></div>
+
+
+        </div>
+    </div>
+    <div th:insert="fragments/cart"></div>
+
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/cart.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-product');
+    const productItems = document.querySelectorAll('.pro-loop');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        productItems.forEach(function(item) {
+            const productName = item.querySelector('.pro-name a').textContent.toLowerCase();
+
+            // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
+            if (productName.includes(searchTerm)) {
+                item.style.display = ''; // Hiện sản phẩm
+            } else {
+                item.style.display = 'none'; // Ẩn sản phẩm
+            }
+        });
+    });
+});
+
+
+function filterByPrice() {
+    const priceFilter = document.getElementById('price-filter').value;
+    let url = `/outerwears?priceRange=${priceFilter}`;
+    window.location.href = url; // Chuyển hướng đến trang lọc
+}
+
+function sortProducts() {
+    const sortOrder = document.querySelector('.sort-by').value;
+    let url = `/outerwears?sortOrder=${sortOrder}`;
+    window.location.href = url; // Chuyển hướng đến trang sắp xếp
+}
+
+function buy_now(productId) {
+    // Logic để thực hiện hành động mua ngay
+    console.log(`Buying product ID: ${productId}`);
+}
+
+
+function addToCart(button) {
+   var productId = button.getAttribute("data-variantid");
+
+   var productBlock = button.closest('.product-block');
+   var productName = productBlock.querySelector('.pro-name a').innerText;
+   var productPrice = productBlock.querySelector('.pro-price').innerText;
+   var productImg = productBlock.querySelector('img.img-loop').src;
+
+
+
+   var existingProduct = cart.find(product => product.id === productId);
+
+   if (existingProduct) {
+       existingProduct.quantity += 1;
+   } else {
+       var product = {
+           id: productId,
+           name: productName,
+           price: productPrice,
+           img: productImg,
+           quantity: 1
+       };
+       cart.push(product);
+   }
+
+   updateCartView();
+   saveCartToLocalStorage();
+}
+
+
+</script>
+
+
+
+</html>
